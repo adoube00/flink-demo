@@ -104,10 +104,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="552" y="181" key="#Project_Structure/0.0.1920.1040@0.0.1920.1040" timestamp="1593235415469" />
-    <state x="572" y="113" key="CommitChangelistDialog2" timestamp="1593242943185">
+    <state x="572" y="113" key="CommitChangelistDialog2" timestamp="1593242975530">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="572" y="113" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1593242943185" />
+    <state x="572" y="113" key="CommitChangelistDialog2/0.0.1920.1040@0.0.1920.1040" timestamp="1593242975530" />
     <state x="184" y="92" key="DiffContextDialog" timestamp="1593242741025">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -116,9 +116,17 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="672" y="249" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1593242621342" />
+    <state width="246" height="426" key="Git.Branch.Popup" timestamp="1593243131522">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="246" height="426" key="Git.Branch.Popup/0.0.1920.1040@0.0.1920.1040" timestamp="1593243131522" />
     <state x="463" y="165" key="SettingsEditor" timestamp="1593242450809">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="463" y="165" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1593242450809" />
+    <state x="552" y="256" key="Vcs.Push.Dialog.v2" timestamp="1593243105786">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="552" y="256" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1593243105786" />
   </component>
 </project>
