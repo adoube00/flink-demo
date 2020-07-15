@@ -8,6 +8,7 @@ import org.apache.flink.streaming.api.datastream.AllWindowedStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
@@ -36,7 +37,7 @@ public class CountTest {
 //        Properties pros = ConfigUtil.getKafkaConfig();
         FlinkKafkaConsumer<String> kafkaConsumer = new FlinkKafkaConsumer<String>(topic,
                 new SimpleStringSchema(), pros);
-        //写入偏移量
+        //写入偏移量'
         kafkaConsumer.setCommitOffsetsOnCheckpoints(true);
 
 //        DataStreamSource dataStreamSource = env.addSource(kafkaConsumer);
@@ -45,6 +46,7 @@ public class CountTest {
                 .map(new String2Integer())
                 .timeWindowAll(Time.seconds(5));
         SingleOutputStreamOperator<Integer> sum = stream1.sum(0);
+//        new ProcessWindowFunction<>();
         sum.print();
 
 //        dataStreamSource.print();

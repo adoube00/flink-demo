@@ -1,8 +1,10 @@
 package com.demo.test;
 
+import org.apache.flink.api.common.functions.AggregateFunction;
 import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.api.common.restartstrategy.RestartStrategies;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
+import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.AllWindowedStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -17,9 +19,13 @@ import java.util.Properties;
  */
 public class GtOneWin {
     public static void main(String[] args) throws Exception {
-
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        //设置事件时间
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment
+                .getExecutionEnvironment();
 //        env.enableCheckpointing(500);
+        //设置时间时间->进入flink前就已经决定
+        env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
+
         env.setRestartStrategy(RestartStrategies.fixedDelayRestart(5, 50000));
 
         InputStream stream = KafkaTest.class.getResourceAsStream("/conf/conf.properties");
@@ -43,8 +49,18 @@ public class GtOneWin {
                 .addSource(kafkaConsumer)
                 .map(new String2Integer())
                 .timeWindowAll(Time.seconds(5));
-        SingleOutputStreamOperator<Integer> sum = stream1.sum(0);
-        sum.print();
+//                .aggregate(new Agg());
+//        System.out.println("窗口1输出-->"+sum1);
+//        sum1.print();
+
+        AllWindowedStream<Integer, TimeWindow> stream2 = env
+                .addSource(kafkaConsumer)
+                .map(new String2Integer())
+                .timeWindowAll(Time.seconds(10));
+        SingleOutputStreamOperator<Integer> sum2 = stream2.sum(0);
+        System.out.println("窗口2输出-->"+sum2);
+        sum2.print();
+
 
 //        dataStreamSource.print();
         // 同样效果
@@ -52,6 +68,27 @@ public class GtOneWin {
 
         env.execute("Flink add kafka data source");
     }
+
+    private static class Agg implements AggregateFunction{
+
+
+        public Object createAccumulator() {
+            return null;
+        }
+
+        public Object add(Object o, Object o2) {
+            return null;
+        }
+
+        public Object getResult(Object o) {
+            return null;
+        }
+
+        public Object merge(Object o, Object acc1) {
+            return null;
+        }
+    }
+
 
     private static class String2Integer extends RichMapFunction<String,Integer> {
 
