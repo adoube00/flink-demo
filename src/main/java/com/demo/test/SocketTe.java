@@ -1,14 +1,17 @@
 package com.demo.test;
 
+import org.apache.flink.api.common.functions.RichFlatMapFunction;
 import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.api.common.restartstrategy.RestartStrategies;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
+import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.io.TextInputFormat;
 import org.apache.flink.core.fs.Path;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.source.FileProcessingMode;
 import org.apache.flink.streaming.api.windowing.time.Time;
+import org.apache.flink.util.Collector;
 
 public class SocketTe {
     public static void main(String[] args) throws Exception {
@@ -20,24 +23,25 @@ public class SocketTe {
         DataStreamSource<String> socketSource = env.socketTextStream("175.24.130.58", 9999);
 
         socketSource.print();
-//        socketSource.flatMap(new RichFlatMapFunction<String, WordCount>() {
-//            @Override
-//            public void flatMap(String value, Collector<WordCount> collector) throws Exception {
-//                String[] tokens = value.toLowerCase().split(",");
-//                for (String token : tokens) {
-//                    if (token.length() > 0) {
-//                        collector.collect(new WordCount(token.trim(), 1));
-//                    }
-//                }
-//            }
-//        })
-//                .keyBy(new KeySelector<WordCount, String>() {
-//                    public String getKey(WordCount wc) throws Exception {
-//                        return wc.word;
-//                    }
-//                }).timeWindow(Time.seconds(5))
-//                .sum("count").print()
-//                .setParallelism(1);
+        socketSource.flatMap(new RichFlatMapFunction<String, WordCount>() {
+            //转换操作
+            @Override
+            public void flatMap(String value, Collector<WordCount> collector) throws Exception {
+                String[] tokens = value.toLowerCase().split(",");
+                for (String token : tokens) {
+                    if (token.length() > 0) {
+                        collector.collect(new WordCount(token.trim(), 1));
+                    }
+                }
+            }
+        })
+                .keyBy(new KeySelector<WordCount, String>() {
+                    public String getKey(WordCount wc) throws Exception {
+                        return wc.word;
+                    }
+                }).timeWindow(Time.seconds(5))
+                .sum("count").print()
+                .setParallelism(1);
 //
 //        // stream 创建 timestamp assigner  和  watermark 机制
 //        DataStream<Integer> withTimestampsAndWatermarks = sourceStream.assignTimestampsAndWatermarks(new MyTimestampsAndWatermarks());
